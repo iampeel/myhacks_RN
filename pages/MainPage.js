@@ -1,5 +1,4 @@
 import React from "react";
-import mainImage from "../assets/main.png";
 import {
     StyleSheet,
     Text,
@@ -9,8 +8,14 @@ import {
     ScrollView,
 } from "react-native";
 
+// 이미지 주소
+const main =
+    "https://storage.googleapis.com/sparta-image.appspot.com/lecture/main.png";
+
 // json 데이터 가져오기
 import data from "../data.json";
+// Card 컴포넌트 가져오기
+import Card from "../components/Card";
 
 export default function MainPage() {
     // json 데이터 할당
@@ -27,7 +32,7 @@ export default function MainPage() {
             <Text style={styles.weather}>
                 오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
             </Text>
-            <Image style={styles.mainImage} source={mainImage}></Image>
+            <Image style={styles.mainImage} source={{ uri: main }} />
             {/* 여긴 버튼이라 좌우로 스크롤 */}
             {/* horizontal={true}를 저렇게 써도 되네 */}
             {/* indicator ?? */}
@@ -64,31 +69,8 @@ export default function MainPage() {
               */}
                 {/* content는 내용 하나, i는 index */}
                 {tip.map((content, i) => {
-                    return (
-                        // js로 여러 개를 추출할때는 key값을 줘야 한다고 함
-                        <View style={styles.card} key={i}>
-                            <Image
-                                style={styles.cardImage}
-                                source={{ uri: content.image }}
-                            />
-                            <View style={styles.cardText}>
-                                <Text
-                                    style={styles.cardTitle}
-                                    // 몇 줄을 보여줄것인가
-                                    // 1 은 1줄 보여주고 넘어가면 말줄임표 처리
-                                    numberOfLines={1}
-                                >
-                                    {content.title}
-                                </Text>
-                                <Text style={styles.cardDesc} numberOfLines={3}>
-                                    {content.desc}
-                                </Text>
-                                <Text style={styles.cardDate}>
-                                    {content.date}
-                                </Text>
-                            </View>
-                        </View>
-                    );
+                    // 카드 컴포넌트화
+                    return <Card content={content} key={i} />;
                 })}
             </View>
         </ScrollView>
