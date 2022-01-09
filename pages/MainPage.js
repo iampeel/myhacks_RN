@@ -1,3 +1,4 @@
+// 번호 진행 1, 2, 3, 4
 // 3. { useState, useEffect }
 import React, { useState, useEffect } from "react";
 import {
@@ -21,6 +22,8 @@ import Card from "../components/Card";
 // Loadong 은 앱이 데이터를 가져오는데 버퍼링이 생기는 경우
 // 보여주는 화면
 import Loading from "../components/Loading";
+// 4. 상단 상태바 쓰기 위함
+import { StatusBar } from "expo-status-bar";
 
 export default function MainPage() {
     // 3. state라는 변수를 []로 초기화 해주겠다.
@@ -85,6 +88,8 @@ export default function MainPage() {
     ) : (
         // 1. 전체를 스크롤뷰로 감쌀 예정이라
         <ScrollView style={styles.container}>
+            {/* 4. 상단 상태바 */}
+            <StatusBar style="dark" />
             <Text style={styles.title}>나만의 꿀팁</Text>
             {/* 2. 오른쪽 상단 날씨 추가 */}
             <Text style={styles.weather}>
