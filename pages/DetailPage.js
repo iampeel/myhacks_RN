@@ -1,5 +1,7 @@
 // 5: 네비게이터
 // 6: 공유하기
+// 7. 외부 링크
+
 // 5.
 // import React from "react";
 import React, { useState, useEffect } from "react";
@@ -14,6 +16,8 @@ import {
     Alert,
     Share,
 } from "react-native";
+// 7.
+import * as Linking from "expo-linking";
 
 // 5.
 // export default function DetailPage() {
@@ -65,6 +69,11 @@ export default function DetailPage({ navigation, route }) {
         });
     };
 
+    // 7.
+    const link = () => {
+        Linking.openURL("https://spartacodingclub.kr");
+    };
+
     return (
         <ScrollView style={styles.container}>
             <Image style={styles.image} source={{ uri: tip.image }} />
@@ -88,6 +97,13 @@ export default function DetailPage({ navigation, route }) {
                         onPress={() => share()}
                     >
                         <Text style={styles.buttonText}>팁 공유하기</Text>
+                    </TouchableOpacity>
+                    {/*7.  */}
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => link()}
+                    >
+                        <Text style={styles.buttonText}>외부 링크</Text>
                     </TouchableOpacity>
                 </View>
             </View>
