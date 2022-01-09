@@ -1,4 +1,4 @@
-// 번호 진행 1, 2, 3, 4
+// 5: 네비게이션
 // 3. { useState, useEffect }
 import React, { useState, useEffect } from "react";
 import {
@@ -23,9 +23,12 @@ import Card from "../components/Card";
 // 보여주는 화면
 import Loading from "../components/Loading";
 // 4. 상단 상태바 쓰기 위함
+// 지워도 되지 않을까? App.js에서 처리했는데
 import { StatusBar } from "expo-status-bar";
 
-export default function MainPage() {
+// 5. 네이게이션 인자 넣기
+// export default function MainPage() {
+export default function MainPage({ navigation, route }) {
     // 3. state라는 변수를 []로 초기화 해주겠다.
     // state값을 바꿀때는 setState를 사용해라.
     // 상태값이 바뀌면 화면이 다시 로딩된다.
@@ -40,6 +43,10 @@ export default function MainPage() {
     useEffect(() => {
         // 3. 1000은 1초, 1초 뒤에 실행하라는 함수
         setTimeout(() => {
+            // 5. 헤더의 타이틀 변경
+            navigation.setOptions({
+                title: "나만의 꿀팁",
+            });
             // data에서 key값이 tip인 내용으로 초기화
             setState(data.tip);
             // 이내용은 없어도 되는 거 같음
@@ -77,7 +84,8 @@ export default function MainPage() {
     };
 
     // 2. json 데이터 할당
-    let tip = data.tip;
+    // 3. state 작업하면서 삭제
+    // let tip = data.tip;
 
     let todayWeather = 10 + 17;
     let todayCondition = "흐림";
@@ -90,7 +98,8 @@ export default function MainPage() {
         <ScrollView style={styles.container}>
             {/* 4. 상단 상태바 */}
             <StatusBar style="dark" />
-            <Text style={styles.title}>나만의 꿀팁</Text>
+            {/* 5. 네비게이션 도입하면서 제목 중복으로 삭제 */}
+            {/* <Text style={styles.title}>나만의 꿀팁</Text> */}
             {/* 2. 오른쪽 상단 날씨 추가 */}
             <Text style={styles.weather}>
                 오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
@@ -174,7 +183,14 @@ export default function MainPage() {
                 })} */}
                 {/* 3. cateState에 있는 내용 가져옴 */}
                 {cateState.map((content, i) => {
-                    return <Card content={content} key={i} />;
+                    // 5. navigation={navigation} 추가
+                    return (
+                        <Card
+                            content={content}
+                            key={i}
+                            navigation={navigation}
+                        />
+                    );
                 })}
             </View>
         </ScrollView>
@@ -196,6 +212,7 @@ const styles = StyleSheet.create({
     weather: {
         alignSelf: "flex-end",
         paddingRight: 20,
+        marginTop: 10,
     },
 
     mainImage: {

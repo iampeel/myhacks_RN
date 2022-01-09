@@ -1,12 +1,23 @@
+// 2: 카드 컴포넌트화
+// 5: 네비게이션
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-//비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
-export default function Card({ content }) {
+// 2. 비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
+// 5. 인자로 navigation 추가
+export default function Card({ content, navigation }) {
     return (
-        // js로 여러 개를 추출할때는 key값을 줘야 한다고 함
+        // 2. js로 여러 개를 추출할때는 key값을 줘야 한다고 함
         // 컴포넌트화 하면서 key={i}는 지움
-        <View style={styles.card}>
+        // 5. TouchableOpacity로 바꿈, onPress부분 추가
+        // <View style={styles.card}>
+        <TouchableOpacity
+            style={styles.card}
+            onPress={() => {
+                navigation.navigate("DetailPage", content);
+            }}
+        >
+            {/* // */}
             <Image style={styles.cardImage} source={{ uri: content.image }} />
             <View style={styles.cardText}>
                 <Text
@@ -22,7 +33,7 @@ export default function Card({ content }) {
                 </Text>
                 <Text style={styles.cardDate}>{content.date}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
