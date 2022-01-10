@@ -1,6 +1,10 @@
+// 1: 초기 세팅
+
+// 1.
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+// 1.
 export default function Loading() {
     return (
         <View style={styles.container}>
@@ -9,6 +13,7 @@ export default function Loading() {
     );
 }
 
+// 1.
 const styles = StyleSheet.create({
     container: {
         //앱의 배경 색
