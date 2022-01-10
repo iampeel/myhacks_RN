@@ -1,49 +1,72 @@
-import React from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
-const subImage =
-    "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2FaboutImage.png?alt=media&token=13e1c4f6-b802-4975-9773-e305fc7475c4";
+// 1: 초기 세팅
+// 2: 메인 페이지와 연결
+// 3: 상단에 상태바 색 화이트로 변경
 
-export default function App() {
+// 2. { useEffect } 추가
+// 1.
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+
+// 3.
+import { StatusBar } from "expo-status-bar";
+
+// 2. { navigation, route } 추가
+// 1.
+export default function AboutPage({ navigation, route }) {
+    // 1.
+    const aboutImage =
+        "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2FaboutImage.png?alt=media&token=13e1c4f6-b802-4975-9773-e305fc7475c4";
+
+    // 2.
+    useEffect(() => {
+        navigation.setOptions({
+            title: "소개 페이지",
+            headerStyle: {
+                backgroundColor: "#1F266A",
+                shadowColor: "#1F266A",
+            },
+            headerTintColor: "#fff",
+        });
+    }, []);
+
+    // 1.
     return (
-        <View style={styles.containerMain}>
-            <Text style={styles.textMain}>
-                HI! 스파르타코딩 앱 개발 반에 오신것을 환영합니다
+        <View style={styles.container}>
+            {/* 3. */}
+            <StatusBar style="light" />
+
+            <Text style={styles.title}>
+                HI! 스파르타코딩 앱개발 반에 오신것을 환영합니다
             </Text>
-            <View style={styles.containerSub}>
+
+            <View style={styles.textContainer}>
                 <Image
-                    style={styles.imageSub}
-                    source={{ uri: subImage }}
-                ></Image>
-                <Text style={styles.textSub01}>
+                    style={styles.aboutImage}
+                    source={{ uri: aboutImage }}
+                    resizeMode={"cover"}
+                />
+                <Text style={styles.desc01}>
                     많은 내용을 간결하게 담아내려 노력했습니다!
                 </Text>
-                <Text style={styles.textSub02}>
+                <Text style={styles.desc02}>
                     꼭 완주 하셔서 꼭 여러분것으로 만들어가시길 바랍니다
                 </Text>
-                <TouchableOpacity style={styles.textSubBox}>
-                    <Text style={styles.textButton}>여러분의 인스타계정</Text>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>여러분의 인스타계정</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
 
+// 1.
 const styles = StyleSheet.create({
-    containerMain: {
+    container: {
         flex: 1,
         backgroundColor: "#1F266A",
-        // 중간 배치
         alignItems: "center",
     },
-
-    textMain: {
+    title: {
         fontSize: 30,
         fontWeight: "700",
         color: "#fff",
@@ -51,46 +74,39 @@ const styles = StyleSheet.create({
         paddingTop: 100,
         paddingRight: 30,
     },
-
-    containerSub: {
+    textContainer: {
         width: 300,
         height: 500,
         backgroundColor: "#fff",
         marginTop: 50,
         borderRadius: 30,
-        // 중앙 배열
         justifyContent: "center",
         alignItems: "center",
     },
-
-    imageSub: {
+    aboutImage: {
         width: 150,
         height: 150,
         borderRadius: 30,
     },
-
-    textSub01: {
+    desc01: {
         textAlign: "center",
         fontSize: 20,
         fontWeight: "700",
         paddingLeft: 22,
         paddingRight: 22,
     },
-
-    textSub02: {
+    desc02: {
         textAlign: "center",
         fontSize: 15,
         fontWeight: "700",
         padding: 22,
     },
-
-    textSubBox: {
+    button: {
         backgroundColor: "orange",
         padding: 20,
         borderRadius: 15,
     },
-
-    textButton: {
+    buttonText: {
         color: "#fff",
         fontSize: 15,
         fontWeight: "700",

@@ -1,12 +1,17 @@
 // 1: 초기 세팅
+// 2: 소개 페이지 추가
+
+// 1.
 import React from "react";
 
 // 1. 설치한 스택 네비게이션 라이브러리를 가져옴
 import { createStackNavigator } from "@react-navigation/stack";
 
+// 2.
 // 1. 페이지로 만든 컴포넌트들을 불러옴
 import DetailPage from "../pages/DetailPage";
 import MainPage from "../pages/MainPage";
+import AboutPage from "../pages/AboutPage";
 
 // 1. 라이브러리 선언 및 할당
 // 스택 네비게이션 라이브러리가 제공해주는 여러 기능이 담겨있는 객체를 사용하기 위함
@@ -40,6 +45,9 @@ const StackNavigator = () => {
             {/* 순차적으로 읽는 거 같음. MainPage와 DetailPage의 순서를 바꾸면 에러남 */}
             <Stack.Screen name="MainPage" component={MainPage} />
             <Stack.Screen name="DetailPage" component={DetailPage} />
+
+            {/* 2. */}
+            <Stack.Screen name="AboutPage" component={AboutPage} />
         </Stack.Navigator>
     );
 };

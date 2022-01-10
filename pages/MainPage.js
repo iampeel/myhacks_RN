@@ -4,6 +4,7 @@
 // 4: 버튼에 따른 카드 구성(useState, useEffect), 로딩화면 적용
 // 5: 상단에 상태바 스타일링
 // 6: 페이지 이동(navigation)
+// 7: 소개 페이지 버튼
 
 // 4. { useState, useEffect } 추가
 // 1.
@@ -133,6 +134,16 @@ export default function MainPage({ navigation, route }) {
             <Text style={styles.weather}>
                 오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
             </Text>
+
+            {/* 7.  */}
+            <TouchableOpacity
+                style={styles.aboutButton}
+                onPress={() => {
+                    navigation.navigate("AboutPage");
+                }}
+            >
+                <Text style={styles.aboutButtonText}>소개 페이지</Text>
+            </TouchableOpacity>
 
             {/* 1. 이미지 */}
             <Image style={styles.mainImage} source={{ uri: main }} />
@@ -288,6 +299,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
 
+    // 지워도 될 거 같은데..
     title: {
         fontSize: 20,
         fontWeight: "700",
@@ -298,7 +310,8 @@ const styles = StyleSheet.create({
     weather: {
         alignSelf: "flex-end",
         paddingRight: 20,
-        marginTop: 10,
+        // 7.
+        // marginTop: 10,
     },
 
     mainImage: {
@@ -382,6 +395,24 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         marginTop: 10,
         marginLeft: 10,
+    },
+
+    // 7.
+    aboutButton: {
+        backgroundColor: "pink",
+        width: 100,
+        height: 40,
+        borderRadius: 10,
+        alignSelf: "flex-end",
+        marginRight: 20,
+        marginTop: 10,
+    },
+
+    // 7.
+    aboutButtonText: {
+        color: "#fff",
+        textAlign: "center",
+        marginTop: 10,
     },
 
     // 4. card 컨테이너로 보냄
