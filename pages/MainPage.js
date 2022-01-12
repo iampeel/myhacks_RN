@@ -4,7 +4,12 @@
 // 4: 버튼에 따른 카드 구성(useState, useEffect), 로딩화면 적용
 // 5: 상단에 상태바 스타일링
 // 6: 페이지 이동(navigation)
-// 7: 소개 페이지 버튼
+// 7: 소개 페이지 버튼 추가, 페이지 연결
+// 8: 꿀팁찜 페이지 연결
+// 9: 위치 API 사용
+// expo install expo-location
+// 10: 날씨 API 사용, 위치에 따른 날씨 보여주기
+// yarn add axios
 
 // 4. { useState, useEffect } 추가
 // 1.
@@ -37,12 +42,19 @@ import Loading from "../components/Loading";
 // 지워도 되지 않을까? App.js에서 처리했는데
 import { StatusBar } from "expo-status-bar";
 
+// 9. 위에 있는 것들은 지칭하는 이름이 있다.
+// 근데 이건 없어서 내가 Location이라고 지칭
+import * as Location from "expo-location";
+
+// 10. 도메인을 코드단에서 이용하여 서버에 요청하기 위함
+import axios from "axios";
+
 // 6. 네이게이션 인자 넣기, 넣어야 다른 페이지로 이동 가능
 // export default function MainPage() {
 // 1.
 export default function MainPage({ navigation, route }) {
     // 1. 화면 하단에 노란색 박스가 보이면 아래 코드 삽입
-    // console.disableYellowBox = true;
+    console.disableYellowBox = true;
 
     // 4. 삭제
     // 2.
@@ -56,6 +68,12 @@ export default function MainPage({ navigation, route }) {
     // 일단 state에 전체 데이터를 넣어놓고 거기서 꺼내서 쓰겠다는 얘기
     const [cateState, setCateState] = useState([]);
 
+    // 10.
+    const [weather, setWeather] = useState({
+        temp: 0,
+        condition: "",
+    });
+
     // 4. loading 화면을 보여주기위한 세팅
     // ready의 상태가 true이면 로딩페이지
     // ready의 상태가 false이면 메인페이지
@@ -66,12 +84,15 @@ export default function MainPage({ navigation, route }) {
     // --> 2초 뒤에 상태 바꿈(ready도 false로 바꿈) --> 다시 렌더링
     // --> ready가 false니깐 메인페이지
     useEffect(() => {
+        // 6. 네비게이션 헤더의 타이틀 변경할 수 있음
+        navigation.setOptions({
+            title: "나만의 꿀팁",
+        });
+
         // 4. 1000은 1초, 1초 뒤에 실행하라는 함수
         setTimeout(() => {
-            // 6. 네비게이션 헤더의 타이틀 변경할 수 있음
-            navigation.setOptions({
-                title: "나만의 꿀팁",
-            });
+            // 9.
+            getLocation();
 
             // 4. data에서 key값이 tip인 내용으로 초기화
             setState(data.tip);
@@ -87,6 +108,59 @@ export default function MainPage({ navigation, route }) {
         // []: 처음 1번만 실행
         // [state]: state라는 변수의 상태가 바뀔때만
     }, []);
+
+    // 9.
+    const getLocation = async () => {
+        // 9. 외부 API 요청을 try/catch로 감싸기
+        try {
+            // 9. try에는 API요청 작업 코드
+            // 자바스크립트 함수의 실행순서를 고정하기 위해 쓰는 async,await
+            // JS는 비동기처리라 어떤 코드의 처리가 오래걸리면 다른 코드를 먼저 실행
+            // 근데 async와 await를 쓰면 await가 처리된 건 순차적으로 진행
+            await Location.requestPermissionsAsync();
+            const locationData = await Location.getCurrentPositionAsync();
+
+            // 9. 위도 경도 모두
+            // console.log("모두", locationData);
+
+            // 9. 위도
+            // console.log("위도", locationData["coords"]["latitude"]);
+
+            // 9. 경도
+            // console.log("경도", locationData["coords"]["longitude"]);
+
+            // 10. result에서 뽑아 쓰려고
+            const latitude = locationData["coords"]["latitude"];
+            const longitude = locationData["coords"]["longitude"];
+
+            // 10. key값인데 원래 유료
+            const API_KEY = "cfc258c75e1da2149c33daffd07a911d";
+
+            // 10. 아래 코드는 날씨 API 공식 문서를 참고해서
+            const result = await axios.get(
+                `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+            );
+            // 10.
+            // console.log("결과", result);
+
+            // 10.
+            const temp = result.data.main.temp;
+            const condition = result.data.weather[0].main;
+
+            // 10.
+            // console.log("온도", temp);
+            // console.log("날씨", condition);
+
+            // 10.
+            setWeather({
+                temp,
+                condition,
+            });
+            // 9. 에러가 발생할 경우 작업 코드
+        } catch (error) {
+            Alert.alert("위치를 찾을 수가 없습니다.", "앱을 껏다 켜볼까요?");
+        }
+    };
 
     // 4. 밑에 버튼을 이런 식으로 구현했음
     // onPress={() => {
@@ -113,8 +187,10 @@ export default function MainPage({ navigation, route }) {
     // 4. 적용하면서 삭제
     // 2. json 데이터 할당
     // let tip = data.tip;
-    let todayWeather = 10 + 17;
-    let todayCondition = "흐림";
+
+    // 10.
+    // let todayWeather = 10 + 17;
+    // let todayCondition = "흐림";
 
     // 4. 삼항 연산자를 통해 로딩 페이지와 메인 페이지 진입
     // 1. return에서 화면 구성
@@ -130,9 +206,12 @@ export default function MainPage({ navigation, route }) {
             {/* 1. 타이틀 */}
             {/* <Text style={styles.title}>나만의 꿀팁</Text> */}
 
+            {/* 10. */}
             {/* 1. 오른쪽 상단 날씨 */}
+            {/* < style={styles.weather}> */}
+            {/* 오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "} */}
             <Text style={styles.weather}>
-                오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
+                오늘의 날씨: {weather.temp + "°C   " + weather.condition}
             </Text>
 
             {/* 7.  */}
@@ -196,7 +275,9 @@ export default function MainPage({ navigation, route }) {
                 <TouchableOpacity
                     style={styles.middleButton04}
                     onPress={() => {
-                        category("꿀팁 찜");
+                        // 8. 페이지 연결
+                        // category("꿀팁 찜");
+                        navigation.navigate("LikePage");
                     }}
                 >
                     <Text style={styles.middleButtonText}>꿀팁 찜</Text>

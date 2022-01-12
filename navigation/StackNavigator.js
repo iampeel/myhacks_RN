@@ -1,5 +1,6 @@
 // 1: 초기 세팅
 // 2: 소개 페이지 추가
+// 3: 꿀팁찜 페이지 추가
 
 // 1.
 import React from "react";
@@ -7,11 +8,15 @@ import React from "react";
 // 1. 설치한 스택 네비게이션 라이브러리를 가져옴
 import { createStackNavigator } from "@react-navigation/stack";
 
-// 2.
 // 1. 페이지로 만든 컴포넌트들을 불러옴
 import DetailPage from "../pages/DetailPage";
 import MainPage from "../pages/MainPage";
+
+// 2.
 import AboutPage from "../pages/AboutPage";
+
+// 3.
+import LikePage from "../pages/LikePage";
 
 // 1. 라이브러리 선언 및 할당
 // 스택 네비게이션 라이브러리가 제공해주는 여러 기능이 담겨있는 객체를 사용하기 위함
@@ -48,6 +53,9 @@ const StackNavigator = () => {
 
             {/* 2. */}
             <Stack.Screen name="AboutPage" component={AboutPage} />
+
+            {/* 3. */}
+            <Stack.Screen name="LikePage" component={LikePage} />
         </Stack.Navigator>
     );
 };
