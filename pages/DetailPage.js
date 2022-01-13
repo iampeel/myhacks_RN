@@ -2,6 +2,9 @@
 // 2: 상세 페이지 구현
 // 3: 공유하기
 // 4: 링크 접속
+// 5: 넘어온 content를 화면에 전달하는 게 아닌 idx를 가지고 DB조회
+// 이유는 DB도 실시간으로 변경될 수 있고
+// 큰 데이터를 이동하는 것은 앱 퍼포먼스 저하
 
 // 2. { useState, useEffect } 추가
 // 1.
@@ -24,6 +27,9 @@ import {
 // 4.
 import * as Linking from "expo-linking";
 
+// 5.
+import { firebase_db } from "../firebaseConfig";
+
 // 2. 인자로 { navigation, route } 추가
 // 1.
 // export default function DetailPage() {
@@ -45,7 +51,8 @@ export default function DetailPage({ navigation, route }) {
     // 2. 내용이 바뀌면 화면도 바뀌게
     useEffect(() => {
         // 2.route에서 뭘받는지 알아보려고
-        // 저런 걸 받아오네
+        // console.log(route);
+        // 이런 걸 받아오네
         /*         Object {
             "key": "DetailPage-71CR-KbzFWWQ__95C5qvn",
             "name": "DetailPage",
@@ -81,7 +88,6 @@ export default function DetailPage({ navigation, route }) {
             "setOptions": [Function setOptions],
             "setParams": [Function anonymous],
           } */
-        // console.log(route);
 
         // 2. setOptions로 페이지 스타일링
         navigation.setOptions({
@@ -98,8 +104,19 @@ export default function DetailPage({ navigation, route }) {
             headerTintColor: "white",
         });
 
+        // 5. 추가
+        const { idx } = route.params;
+        firebase_db
+            .ref("/tip/" + idx)
+            .once("value")
+            .then((snapshot) => {
+                let tip = snapshot.val();
+                setTip(tip);
+            });
+
+        // 5. 바로 위 firebase_db에 변경해서 삽입
         // 2. 변수 tip의 내용 바꾸기
-        setTip(route.params);
+        // setTip(route.params);
     }, []);
 
     // 1. 팁 찜하기

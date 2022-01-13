@@ -1,5 +1,8 @@
 // 1: 초기 세팅
 // 2: 카드 터치하면 상세 페이지로 이동
+// 3: 터치하면 content 몽땅 보냈는데, idx만 보내줌
+// 이유는 DB도 실시간으로 변경될 수 있고
+// 큰 데이터를 이동하는 것은 앱 퍼포먼스 저하
 
 // 1.
 import React from "react";
@@ -18,7 +21,9 @@ export default function Card({ content, navigation }) {
             // DetailPage라는 name에 정의되어 있는 페이지로 이동
             // 내용도 보냄
             onPress={() => {
-                navigation.navigate("DetailPage", content);
+                // 3.
+                // navigation.navigate("DetailPage", content);
+                navigation.navigate("DetailPage", { idx: content.idx });
             }}
         >
             {/* 1. */}
