@@ -10,6 +10,7 @@
 // expo install expo-location
 // 10: 날씨 API 사용, 위치에 따른 날씨 보여주기
 // yarn add axios
+// 11: firebase 연결 (cmd에서 firebase 설치 및 파일 만들어야 함)
 
 // 4. { useState, useEffect } 추가
 // 1.
@@ -48,6 +49,9 @@ import * as Location from "expo-location";
 
 // 10. 도메인을 코드단에서 이용하여 서버에 요청하기 위함
 import axios from "axios";
+
+// 11.
+import { firebase_db } from "../firebaseConfig";
 
 // 6. 네이게이션 인자 넣기, 넣어야 다른 페이지로 이동 가능
 // export default function MainPage() {
@@ -91,17 +95,31 @@ export default function MainPage({ navigation, route }) {
 
         // 4. 1000은 1초, 1초 뒤에 실행하라는 함수
         setTimeout(() => {
-            // 9.
-            getLocation();
+            // 11. getLocation() 아래 3개를 이거로 묶어줌
+            firebase_db
+                .ref("/tip")
+                .once("value")
+                .then((snapshot) => {
+                    // 11.
+                    console.log("파이어베이스에서 데이터 가져왔습니다!!");
+                    let tip = snapshot.val();
 
-            // 4. data에서 key값이 tip인 내용으로 초기화
-            setState(data.tip);
+                    // 11. data가 아닌 firebase에서 가져오니깐 삭제
+                    // setState(data.tip);
+                    // 4. data에서 key값이 tip인 내용으로 초기화
+                    setState(tip);
 
-            // 4. 이내용은 없어도 되는 거 같음
-            setCateState(data.tip);
+                    // 11. 이것도 마찬가지
+                    // setCateState(data.tip);
+                    // 4. 이내용은 없어도 되는 거 같음
+                    setCateState(tip);
 
-            // 4. 1초 뒤에 false로 초기화
-            setReady(false);
+                    // 9.
+                    getLocation();
+
+                    // 4. 1초 뒤에 false로 초기화
+                    setReady(false);
+                });
         }, 2000);
 
         // 4. []를 안 쓰면 렌더링 될 때마다 이게 실행됨
