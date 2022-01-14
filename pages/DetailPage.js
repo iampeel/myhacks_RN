@@ -5,6 +5,7 @@
 // 5: 넘어온 content를 화면에 전달하는 게 아닌 idx를 가지고 DB조회
 // 이유는 DB도 실시간으로 변경될 수 있고
 // 큰 데이터를 이동하는 것은 앱 퍼포먼스 저하
+// 6: 개개인에 id부여, 찜한 카드 DB에 넣기
 
 // 2. { useState, useEffect } 추가
 // 1.
@@ -29,6 +30,12 @@ import * as Linking from "expo-linking";
 
 // 5.
 import { firebase_db } from "../firebaseConfig";
+
+// 6. cmd에 expo install expo-application 설치후 사용
+// import * as Application from "expo-application";
+
+// 6.
+import Constants from "expo-constants";
 
 // 2. 인자로 { navigation, route } 추가
 // 1.
@@ -119,9 +126,22 @@ export default function DetailPage({ navigation, route }) {
         // setTip(route.params);
     }, []);
 
+    // 6. 아래 코드로 변경
     // 1. 팁 찜하기
-    const popup = () => {
-        Alert.alert("팝업!!");
+    // const popup = () => {
+    //     Alert.alert("팝업!!");
+    // };
+    const like = () => {
+        const user_id = Constants.installationId;
+
+        // 6. id가 들어왔는지 찍어보려고
+        // console.log(user_id)
+        firebase_db
+            .ref("/like/" + user_id + "/" + tip.idx)
+            .set(tip, function (error) {
+                console.log(error);
+                Alert.alert("찜 완료!");
+            });
     };
 
     // 3. 공유하기
@@ -151,7 +171,9 @@ export default function DetailPage({ navigation, route }) {
                 <View style={styles.buttonGroup}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => popup()}
+                        // 6.
+                        // onPress={() => popup()}
+                        onPress={() => like()}
                     >
                         <Text style={styles.buttonText}>팁 찜하기</Text>
                     </TouchableOpacity>
